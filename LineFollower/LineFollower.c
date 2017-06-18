@@ -2,19 +2,16 @@
  * LineFollower.c
  *
  * Created: 08.06.2017 11:03:30
- *  Author: Andi
+ *  Author: Andreas Hinterdorfer, Severin Bergsmann
  
- 
- 
- Working atm:
- Nunchuck
- Manual Mode(Steering+Acceleration)
- Test
  */ 
 
 /*-----------------------------------------------------------------------------------
 *PIN MAPPING
 *------------------------------------------------------------------------------------
+	A0: IRSensor0
+	A1: IRSensor1
+	A2: IRSensor2	
 	02: Ultrasonic Echo
 	13: Motor Analog
 	20: Nunchuck SDA
@@ -38,6 +35,18 @@ TIMER0 for PWM of Motor1
 TIMER2 for Ultrasonic Sensor
 */
 
+/*
+
+Working atm:
+	Nunchuck
+	Manual Mode(Steering+Acceleration)
+	IRSensor
+*/
+/*Todo
+	Ultrasonic Sensor
+	Code for Automatic Mode
+*/
+
 #include <avr/io.h>
 #include "USART.h"
 #include <stdio.h>
@@ -48,7 +57,7 @@ TIMER2 for Ultrasonic Sensor
 
 #define DEBUG_ENABLED 0		//enable or disable debug output
 #define CRCCHECK_ENABLED 1	//enable or disable crc check
-#define IRRefValue 100		//for comparison with IR Sensors
+
 
 
 //Global variables for main motor
@@ -102,6 +111,12 @@ int stepperPosCur = 0;		//Current Position of Stepper Motor
 int stepTable[] = {(1<<stepA), (1<<stepA)|(1<<stepB), (1<<stepB), (1<<stepB)|(1<<stepC), (1<<stepC), (1<<stepC)|(1<<stepD), (1<<stepD), (1<<stepD)|(1<<stepA)};
 int stepTableSize = sizeof(stepTable)/sizeof(stepTable[0]); //calculates the size of the array stepTable
 
+//Definitions for IRSensors
+#define IRRefValue 100		//for comparison with IR Sensors
+#define IRLeft 0
+#define IRRight 1
+#define IRMid 2
+
 
 //Initialize USART, may only be used for debugging
 void initUSART(){
@@ -122,7 +137,23 @@ void initUltrasonic(){
 	ultrasonic_working = 0;
 }
 void initIRSensor(){
+	//Referenzspannung wählen
+	ADMUX = (1<<REFS0) | (1<<REFS1);	//2.56V
+	//Standard single conversion
+	//ADFR=1 damit dauerbetrieb
 	
+	//Vorteiler wählen, sodass Frequenz zwischen 50kHz-200kHz --> 128 --> 125kHz
+	ADCSRA = (1<<ADPS0)| (1<<ADPS1) | (1<<ADPS2); //AnalogDigitalPreScalser = 128
+	
+	//ADC aktivieren
+	ADCSRA |= (1<<ADEN);
+	
+	ADCSRA |= (1<<ADSC);                  // eine ADC-Wandlung 
+	while (ADCSRA & (1<<ADSC) ) {}         // auf Abschluss der Konvertierung warten
+	
+	/* ADCW muss einmal gelesen werden, sonst wird Ergebnis der nächsten
+     Wandlung nicht übernommen. */
+	(void) ADCW;
 }
 
 void initMotor(){
@@ -247,15 +278,16 @@ int ultrasonicCheckDist(){
 	*/
 	return 21;
 }
-int IRSensorLeft(){
-	return 0;
+uint16_t ADC_Read( uint8_t channel )
+{
+	// Kanal waehlen, ohne andere Bits zu beeinflußen
+	ADMUX = (ADMUX & ~(0x1F)) | (channel & 0x1F);
+	ADCSRA |= (1<<ADSC);            // eine Wandlung "single conversion"
+	while (ADCSRA & (1<<ADSC) ) {   // auf Abschluss der Konvertierung warten
+	}
+	return ADCW;                    // ADC auslesen und zurückgeben
 }
-int IRSensorRight(){
-	return 0;
-}
-int IRSensorMid(){
-	return 0;
-}
+
 //Service Routine for Timer 2 (used for ultrasonic sensor)
 ISR (TIMER2_OVF_vect)
 {	
@@ -332,13 +364,13 @@ int main(void)
 			}else                       								//In Automatic Mode, no obstacle in range
 			{	
 				printf("NO OBSTACLE\n");														
-				if(IRSensorLeft()<IRRefValue)
+				if(ADC_Read(IRLeft)<IRRefValue)
 				{
 					
-				}else if(IRSensorRight()<IRRefValue)
+				}else if(ADC_Read(IRRight)<IRRefValue)
 				{
 					
-				}else if(IRSensorMid()<IRRefValue)
+				}else if(ADC_Read(IRMid)<IRRefValue)
 				{
 					
 					}else{
