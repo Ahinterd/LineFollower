@@ -3,15 +3,29 @@
  *
  * Created: 08.06.2017 11:03:30
  *  Author: Andi
+ 
+ 
+ 
+ Working atm:
+ Nunchuck
+ Manual Mode(Steering+Acceleration)
  */ 
 
 /*-----------------------------------------------------------------------------------
 *PIN MAPPING
 *------------------------------------------------------------------------------------
 	02: Ultrasonic Echo
+	13: Motor Analog
 	20: Nunchuck SDA
 	21: Nunchuck SCL
 	22: Ultrasonic Trigger
+	23: Stepper In1
+	24: Motor IN1
+	25: Stepper In2
+	26: Motor IN2
+	27: Stepper In3
+	29: Stepper In4
+	
 
 
 */
@@ -22,8 +36,6 @@ Timers used
 TIMER0 for PWM of Motor1
 TIMER2 for Ultrasonic Sensor
 */
-
-//
 
 #include <avr/io.h>
 #include "USART.h"
@@ -42,11 +54,9 @@ TIMER2 for Ultrasonic Sensor
 uint8_t motorSpeed = 0;
 uint8_t motorDir = 0;		//1 = forward, 0 = reverse
 
-//Global variables for steering stepper motor
-int stepperPos = 0;			//Goal Positon of Stepper Motor		+ = right  /  - = left
-int stepperPosCur = 0;		//Current Position of Stepper Motor
-
-uint8_t automatic = 0;
+//Definitions for main motor
+#define motorIn1 PA2
+#define motorIn2 PA4
 
 //Global variables for nunchuck
 uint8_t buttonZ;
@@ -56,6 +66,10 @@ int joyY;
 int angleX;
 int angleY;
 int angleZ;
+uint8_t automatic = 0;
+
+//Definitions for nunchuck
+#define joyYMax 103
 
 //Definitions for ultrasonic sensor
 
@@ -72,6 +86,20 @@ volatile int ultrasonic_gotSignal = 0;
 uint16_t ultrasonic_timerOVFValue;
 uint8_t ultrasonic_error;
 volatile int ultrasonic_working = 0;
+
+//Definitions for stepper motor
+#define stepA PA1
+#define stepB PA3
+#define stepC PA5
+#define stepD PA7
+#define stepDelay 1600
+
+//Global variables for steering stepper motor
+int stepperPos = 0;			//Goal Positon of Stepper Motor		+ = right  /  - = left
+int stepperPosCur = 0;		//Current Position of Stepper Motor
+
+int stepTable[] = {(1<<stepA), (1<<stepA)|(1<<stepB), (1<<stepB), (1<<stepB)|(1<<stepC), (1<<stepC), (1<<stepC)|(1<<stepD), (1<<stepD), (1<<stepD)|(1<<stepA)};
+int stepTableSize = sizeof(stepTable)/sizeof(stepTable[0]); //calculates the size of the array stepTable
 
 
 //Initialize USART, may only be used for debugging
@@ -94,6 +122,41 @@ void initUltrasonic(){
 }
 void initIRSensor(){
 	
+}
+
+void initMotor(){
+	// initialize timer0 in PWM mode
+	TCCR0A |= (1<<WGM00)|(1<<COM0A1);
+	TCCR0B |= (1<<CS00);
+	
+	// make sure to make OC0 pin  as output pin
+	DDRB |= (1<<PB7);
+	
+	//set motorIn as output
+	DDRA |= (1<<motorIn1)|(1<<motorIn2);
+	
+	OCR0A = 0; //duty cycle... 0 = 0% = 0V, 255 = 100% = 5V
+}
+void initStepper(){
+	DDRA |= (1<<stepA)|(1<<stepB)|(1<<stepC)|(1<<stepD);	//set Stepper pins as output
+}
+void stepLeft(){
+	printf("Step Left\n");							//for debugging
+	for(int steps = 7; steps>=0; steps--){			//always do a full step cycle of 8 steps(halfstepping)
+		PORTA |= stepTable[steps];					//activate StepperPin
+		_delay_us(stepDelay);						//wait until motor has turned
+		stepperPos--;								//change stepperPos
+		PORTA &=~ stepTable[steps];					//deactivate StepperPin
+	}
+}
+void stepRight(){
+	printf("Step Right\n");
+	for(int steps = 0; steps<=7; steps++){
+		PORTA |= stepTable[steps];
+		_delay_us(stepDelay);
+		stepperPos++;
+		PORTA &=~ stepTable[steps];
+	}
 }
 void ultrasonic_init_timer2(){
 	//timer 2 is a 8 bit timer --> overflow after 255 ticks
@@ -122,6 +185,33 @@ void nunchuck_getData(){
 	angleX = wiinunchuck_getangleX();
 	angleY = wiinunchuck_getangleY();
 	angleZ = wiinunchuck_getangleZ();
+}
+void nunchuckCheckY(){
+	if(joyY>=5){												//Joystick Y in positive position
+		OCR0A = joyY*255/joyYMax;								//set duty cycle relative to joystick position
+		PORTA |= (1<<motorIn1);									//set In1 1 and In2 0 --> Motor turns forward
+		PORTA &=~ (1 << motorIn2);
+		printf("%d\n", OCR0A);
+		}else if(joyY<=-5){										//Joystick Y in negative position
+		OCR0A = joyY/joyYMax*255/2;								//set duty cycle relative to joystick position and only drive at half speed
+		PORTA |= (1<<motorIn2);									//set In2 1 and In1 0 --> Motor turns backwards
+		PORTA &=~ (1 << motorIn1);
+		printf("Backward\n");
+		}else{													//Joystick Y in 0 position
+		OCR0A = 0;												//set all three values 0 --> Motor stops
+		PORTA &=~ (1 << motorIn1);
+		PORTA &=~ (1 << motorIn2);
+		printf("Stop\n");
+	}
+}
+void nunchuckCheckX(){
+	if(joyX>10){												//Joystick position right
+		stepRight();
+	}else if(joyX<-10){											//Joystick postion left
+		stepLeft();
+	}else{														//Joystick X in 0 position
+		
+	}
 }
 int ultrasonicCheckDist(){
 	/*
@@ -203,21 +293,36 @@ int main(void)
 	initNunchuck();
 	initUltrasonic();
 	initIRSensor();
+	initMotor();
+	initStepper();
 	printf("Initialization complete!\n");
 	
     while(1)
     {
 		if(automatic == 0)												//Check if Automatic Mode not enabled
 		{
+
+			//printf("\nZ: %i\nC: %i\nX: %i\nY: %i\n", buttonZ, buttonC, joyX, joyY);
+			//_delay_ms(500);
+			
+			
 			nunchuck_getData();			
 			if(buttonC)													//When C pressed toggle Automatic Mode
 			{
 				automatic = 1;
+				_delay_ms(500);
 			}
+			nunchuckCheckY();
+			nunchuckCheckX();
+			
 			
 		}else  															//In Automatic Mode
 		{
 			printf("Auto mode!\n\n");
+			if(buttonC){
+				automatic = 0;
+				_delay_ms(500);
+			}
 										
 			if(ultrasonicCheckDist()<20)								//Check Distance to obstacle
 			{															//In Automatic Mode, obstacle in range
