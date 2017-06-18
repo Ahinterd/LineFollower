@@ -45,6 +45,7 @@ Working atm:
 /*Todo
 	Ultrasonic Sensor
 	Code for Automatic Mode
+	Max Wheel Postion for Steering
 */
 
 #include <avr/io.h>
@@ -67,6 +68,8 @@ uint8_t motorDir = 0;		//1 = forward, 0 = reverse
 //Definitions for main motor
 #define motorIn1 PA2
 #define motorIn2 PA4
+#define motorSpeedSlow 128
+#define motorSpeedFast 255
 
 //Global variables for nunchuck
 uint8_t buttonZ;
@@ -108,8 +111,6 @@ volatile int ultrasonic_working = 0;
 int stepperPos = 0;			//Goal Positon of Stepper Motor		+ = right  /  - = left
 int stepperPosCur = 0;		//Current Position of Stepper Motor
 
-int stepTable[] = {(1<<stepA), (1<<stepA)|(1<<stepB), (1<<stepB), (1<<stepB)|(1<<stepC), (1<<stepC), (1<<stepC)|(1<<stepD), (1<<stepD), (1<<stepD)|(1<<stepA)};
-int stepTableSize = sizeof(stepTable)/sizeof(stepTable[0]); //calculates the size of the array stepTable
 
 //Definitions for IRSensors
 #define IRRefValue 100		//for comparison with IR Sensors
@@ -172,23 +173,45 @@ void initMotor(){
 void initStepper(){
 	DDRA |= (1<<stepA)|(1<<stepB)|(1<<stepC)|(1<<stepD);	//set Stepper pins as output
 }
-void stepLeft(){
-	printf("Step Left\n");							//for debugging
-	for(int steps = 7; steps>=0; steps--){			//always do a full step cycle of 8 steps(halfstepping)
-		PORTA |= stepTable[steps];					//activate StepperPin
-		_delay_us(stepDelay);						//wait until motor has turned
-		stepperPos--;								//change stepperPos
-		PORTA &=~ stepTable[steps];					//deactivate StepperPin
-	}
+void step1(){
+	PORTA |= (1<<stepB)|(1<<stepC);		//set pins high
+	PORTA &=~((1<<stepA)|(1<<stepD));	//set pins low
+	_delay_us(2500);
 }
-void stepRight(){
-	printf("Step Right\n");
-	for(int steps = 0; steps<=7; steps++){
-		PORTA |= stepTable[steps];
-		_delay_us(stepDelay);
-		stepperPos++;
-		PORTA &=~ stepTable[steps];
+void step2(){
+	PORTA |= (1<<stepB)|(1<<stepD);
+	PORTA &=~((1<<stepA)|(1<<stepC));
+	_delay_us(2500);
+}
+void step3(){
+	PORTA |= (1<<stepA)|(1<<stepD);
+	PORTA &=~((1<<stepB)|(1<<stepC));
+	_delay_us(2500);
+}
+void step4(){
+	PORTA |= (1<<stepA)|(1<<stepC);
+	PORTA &=~((1<<stepB)|(1<<stepD));
+	_delay_us(2500);
+}
+void stepLeft(int cycles){
+	printf("Step Left\n");
+	for(int i = 0; i<cycles; i++){							//for debugging
+		step4();
+		step3();
+		step2();
+		step1();
 	}
+	PORTA &=~((1<<stepA)|(1<<stepB)|(1<<stepC)|(1<<stepD));
+}
+void stepRight(int cycles){
+	printf("Step Right\n");
+	for(int i = 0; i<cycles; i++){							//for debugging
+		step1();
+		step2();
+		step3();
+		step4();
+	}
+	PORTA &=~((1<<stepA)|(1<<stepB)|(1<<stepC)|(1<<stepD));
 }
 void ultrasonic_init_timer2(){
 	//timer 2 is a 8 bit timer --> overflow after 255 ticks
@@ -225,10 +248,10 @@ void nunchuckCheckY(){
 		PORTA &=~ (1 << motorIn2);
 		printf("%d\n", OCR0A);
 		}else if(joyY<=-5){										//Joystick Y in negative position
-		OCR0A = joyY/joyYMax*255/2;								//set duty cycle relative to joystick position and only drive at half speed
+		OCR0A = joyY*(-1)*255/joyYMax/2;								//set duty cycle relative to joystick position and only drive at half speed
 		PORTA |= (1<<motorIn2);									//set In2 1 and In1 0 --> Motor turns backwards
 		PORTA &=~ (1 << motorIn1);
-		printf("Backward\n");
+		printf("%d\n", OCR0A);
 		}else{													//Joystick Y in 0 position
 		OCR0A = 0;												//set all three values 0 --> Motor stops
 		PORTA &=~ (1 << motorIn1);
@@ -238,9 +261,9 @@ void nunchuckCheckY(){
 }
 void nunchuckCheckX(){
 	if(joyX>10){												//Joystick position right
-		stepRight();
+		stepRight(1);
 	}else if(joyX<-10){											//Joystick postion left
-		stepLeft();
+		stepLeft(1);
 	}else{														//Joystick X in 0 position
 		
 	}
@@ -364,20 +387,22 @@ int main(void)
 			}else                       								//In Automatic Mode, no obstacle in range
 			{	
 				printf("NO OBSTACLE\n");														
-				if(ADC_Read(IRLeft)<IRRefValue)
+				if(ADC_Read(IRLeft)<IRRefValue)							//IR Left returns black
 				{
-					
-				}else if(ADC_Read(IRRight)<IRRefValue)
-				{
-					
-				}else if(ADC_Read(IRMid)<IRRefValue)
-				{
-					
-					}else{
-					
+					stepLeft(1);										//steer left
+					OCR0A = motorSpeedSlow;								//set speed slow by changing duty cycle of PWM
+				}else if(ADC_Read(IRRight)<IRRefValue)					//IR Right returns black
+					{
+						stepRight(1);									//steer right
+						OCR0A = motorSpeedSlow;							//set speed slow by changing duty cycle of PWM
+					}else if(ADC_Read(IRMid)<IRRefValue)				//IR Mid returns black
+						{
+							OCR0A = motorSpeedFast;						//set speed fast by changing duty cycle of PWM
+					}else          										//No sensor returned black--error condition
+					{
+						OCR0A = 0;
 				}
-			}	
-		
+			}			
 		}
 	}
 }
