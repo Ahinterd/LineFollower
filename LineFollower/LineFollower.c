@@ -2,19 +2,16 @@
  * LineFollower.c
  *
  * Created: 08.06.2017 11:03:30
- *  Author: Andi
+ *  Author: Andreas Hinterdorfer, Severin Bergsmann
  
- 
- 
- Working atm:
- Nunchuck
- Manual Mode(Steering+Acceleration)
- Test
  */ 
 
 /*-----------------------------------------------------------------------------------
 *PIN MAPPING
 *------------------------------------------------------------------------------------
+	A0: IRSensor0
+	A1: IRSensor1
+	A2: IRSensor2	
 	02: Ultrasonic Echo
 	13: Motor Analog
 	20: Nunchuck SDA
@@ -38,6 +35,19 @@ TIMER0 for PWM of Motor1
 TIMER2 for Ultrasonic Sensor
 */
 
+/*
+
+Working atm:
+	Nunchuck
+	Manual Mode(Steering+Acceleration)
+	IRSensor
+*/
+/*Todo
+	Ultrasonic Sensor
+	Code for Automatic Mode
+	Max Wheel Postion for Steering
+*/
+
 #include <avr/io.h>
 #include "USART.h"
 #include <stdio.h>
@@ -48,7 +58,7 @@ TIMER2 for Ultrasonic Sensor
 
 #define DEBUG_ENABLED 0		//enable or disable debug output
 #define CRCCHECK_ENABLED 1	//enable or disable crc check
-#define IRRefValue 100		//for comparison with IR Sensors
+
 
 
 //Global variables for main motor
@@ -58,6 +68,8 @@ uint8_t motorDir = 0;		//1 = forward, 0 = reverse
 //Definitions for main motor
 #define motorIn1 PA2
 #define motorIn2 PA4
+#define motorSpeedSlow 128
+#define motorSpeedFast 255
 
 //Global variables for nunchuck
 uint8_t buttonZ;
@@ -99,8 +111,12 @@ volatile int ultrasonic_working = 0;
 int stepperPos = 0;			//Goal Positon of Stepper Motor		+ = right  /  - = left
 int stepperPosCur = 0;		//Current Position of Stepper Motor
 
-int stepTable[] = {(1<<stepA), (1<<stepA)|(1<<stepB), (1<<stepB), (1<<stepB)|(1<<stepC), (1<<stepC), (1<<stepC)|(1<<stepD), (1<<stepD), (1<<stepD)|(1<<stepA)};
-int stepTableSize = sizeof(stepTable)/sizeof(stepTable[0]); //calculates the size of the array stepTable
+
+//Definitions for IRSensors
+#define IRRefValue 100		//for comparison with IR Sensors
+#define IRLeft 0
+#define IRRight 1
+#define IRMid 2
 
 
 //Initialize USART, may only be used for debugging
@@ -122,7 +138,23 @@ void initUltrasonic(){
 	ultrasonic_working = 0;
 }
 void initIRSensor(){
+	//Referenzspannung wählen
+	ADMUX = (1<<REFS0) | (1<<REFS1);	//2.56V
+	//Standard single conversion
+	//ADFR=1 damit dauerbetrieb
 	
+	//Vorteiler wählen, sodass Frequenz zwischen 50kHz-200kHz --> 128 --> 125kHz
+	ADCSRA = (1<<ADPS0)| (1<<ADPS1) | (1<<ADPS2); //AnalogDigitalPreScalser = 128
+	
+	//ADC aktivieren
+	ADCSRA |= (1<<ADEN);
+	
+	ADCSRA |= (1<<ADSC);                  // eine ADC-Wandlung 
+	while (ADCSRA & (1<<ADSC) ) {}         // auf Abschluss der Konvertierung warten
+	
+	/* ADCW muss einmal gelesen werden, sonst wird Ergebnis der nächsten
+     Wandlung nicht übernommen. */
+	(void) ADCW;
 }
 
 void initMotor(){
@@ -141,23 +173,45 @@ void initMotor(){
 void initStepper(){
 	DDRA |= (1<<stepA)|(1<<stepB)|(1<<stepC)|(1<<stepD);	//set Stepper pins as output
 }
-void stepLeft(){
-	printf("Step Left\n");							//for debugging
-	for(int steps = 7; steps>=0; steps--){			//always do a full step cycle of 8 steps(halfstepping)
-		PORTA |= stepTable[steps];					//activate StepperPin
-		_delay_us(stepDelay);						//wait until motor has turned
-		stepperPos--;								//change stepperPos
-		PORTA &=~ stepTable[steps];					//deactivate StepperPin
-	}
+void step1(){
+	PORTA |= (1<<stepB)|(1<<stepC);		//set pins high
+	PORTA &=~((1<<stepA)|(1<<stepD));	//set pins low
+	_delay_us(2500);
 }
-void stepRight(){
-	printf("Step Right\n");
-	for(int steps = 0; steps<=7; steps++){
-		PORTA |= stepTable[steps];
-		_delay_us(stepDelay);
-		stepperPos++;
-		PORTA &=~ stepTable[steps];
+void step2(){
+	PORTA |= (1<<stepB)|(1<<stepD);
+	PORTA &=~((1<<stepA)|(1<<stepC));
+	_delay_us(2500);
+}
+void step3(){
+	PORTA |= (1<<stepA)|(1<<stepD);
+	PORTA &=~((1<<stepB)|(1<<stepC));
+	_delay_us(2500);
+}
+void step4(){
+	PORTA |= (1<<stepA)|(1<<stepC);
+	PORTA &=~((1<<stepB)|(1<<stepD));
+	_delay_us(2500);
+}
+void stepLeft(int cycles){
+	printf("Step Left\n");
+	for(int i = 0; i<cycles; i++){							//for debugging
+		step4();
+		step3();
+		step2();
+		step1();
 	}
+	PORTA &=~((1<<stepA)|(1<<stepB)|(1<<stepC)|(1<<stepD));
+}
+void stepRight(int cycles){
+	printf("Step Right\n");
+	for(int i = 0; i<cycles; i++){							//for debugging
+		step1();
+		step2();
+		step3();
+		step4();
+	}
+	PORTA &=~((1<<stepA)|(1<<stepB)|(1<<stepC)|(1<<stepD));
 }
 void ultrasonic_init_timer2(){
 	//timer 2 is a 8 bit timer --> overflow after 255 ticks
@@ -194,10 +248,10 @@ void nunchuckCheckY(){
 		PORTA &=~ (1 << motorIn2);
 		printf("%d\n", OCR0A);
 		}else if(joyY<=-5){										//Joystick Y in negative position
-		OCR0A = joyY/joyYMax*255/2;								//set duty cycle relative to joystick position and only drive at half speed
+		OCR0A = joyY*(-1)*255/joyYMax/2;								//set duty cycle relative to joystick position and only drive at half speed
 		PORTA |= (1<<motorIn2);									//set In2 1 and In1 0 --> Motor turns backwards
 		PORTA &=~ (1 << motorIn1);
-		printf("Backward\n");
+		printf("%d\n", OCR0A);
 		}else{													//Joystick Y in 0 position
 		OCR0A = 0;												//set all three values 0 --> Motor stops
 		PORTA &=~ (1 << motorIn1);
@@ -207,9 +261,9 @@ void nunchuckCheckY(){
 }
 void nunchuckCheckX(){
 	if(joyX>10){												//Joystick position right
-		stepRight();
+		stepRight(1);
 	}else if(joyX<-10){											//Joystick postion left
-		stepLeft();
+		stepLeft(1);
 	}else{														//Joystick X in 0 position
 		
 	}
@@ -247,15 +301,16 @@ int ultrasonicCheckDist(){
 	*/
 	return 21;
 }
-int IRSensorLeft(){
-	return 0;
+uint16_t ADC_Read( uint8_t channel )
+{
+	// Kanal waehlen, ohne andere Bits zu beeinflußen
+	ADMUX = (ADMUX & ~(0x1F)) | (channel & 0x1F);
+	ADCSRA |= (1<<ADSC);            // eine Wandlung "single conversion"
+	while (ADCSRA & (1<<ADSC) ) {   // auf Abschluss der Konvertierung warten
+	}
+	return ADCW;                    // ADC auslesen und zurückgeben
 }
-int IRSensorRight(){
-	return 0;
-}
-int IRSensorMid(){
-	return 0;
-}
+
 //Service Routine for Timer 2 (used for ultrasonic sensor)
 ISR (TIMER2_OVF_vect)
 {	
@@ -332,20 +387,22 @@ int main(void)
 			}else                       								//In Automatic Mode, no obstacle in range
 			{	
 				printf("NO OBSTACLE\n");														
-				if(IRSensorLeft()<IRRefValue)
+				if(ADC_Read(IRLeft)<IRRefValue)							//IR Left returns black
 				{
-					
-				}else if(IRSensorRight()<IRRefValue)
-				{
-					
-				}else if(IRSensorMid()<IRRefValue)
-				{
-					
-					}else{
-					
+					stepLeft(1);										//steer left
+					OCR0A = motorSpeedSlow;								//set speed slow by changing duty cycle of PWM
+				}else if(ADC_Read(IRRight)<IRRefValue)					//IR Right returns black
+					{
+						stepRight(1);									//steer right
+						OCR0A = motorSpeedSlow;							//set speed slow by changing duty cycle of PWM
+					}else if(ADC_Read(IRMid)<IRRefValue)				//IR Mid returns black
+						{
+							OCR0A = motorSpeedFast;						//set speed fast by changing duty cycle of PWM
+					}else          										//No sensor returned black--error condition
+					{
+						OCR0A = 0;
 				}
-			}	
-		
+			}			
 		}
 	}
 }
