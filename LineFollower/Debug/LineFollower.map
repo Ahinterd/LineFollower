@@ -795,30 +795,30 @@ LOAD b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2028
+.debug_info     0x00000000     0x2029
  *(.debug_info)
- .debug_info    0x00000000      0x8e0 LineFollower.o
- .debug_info    0x000008e0      0x1bd twimaster.o
- .debug_info    0x00000a9d      0x40d USART.o
- .debug_info    0x00000eaa      0x5d0 wiinunchuck.o
- .debug_info    0x0000147a      0x14e b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(iob.o)
- .debug_info    0x000015c8      0x1fa b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(printf.o)
- .debug_info    0x000017c2      0x1a9 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(puts.o)
- .debug_info    0x0000196b      0x549 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
- .debug_info    0x00001eb4      0x174 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
+ .debug_info    0x00000000      0x8e1 LineFollower.o
+ .debug_info    0x000008e1      0x1bd twimaster.o
+ .debug_info    0x00000a9e      0x40d USART.o
+ .debug_info    0x00000eab      0x5d0 wiinunchuck.o
+ .debug_info    0x0000147b      0x14e b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(iob.o)
+ .debug_info    0x000015c9      0x1fa b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(printf.o)
+ .debug_info    0x000017c3      0x1a9 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(puts.o)
+ .debug_info    0x0000196c      0x549 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
+ .debug_info    0x00001eb5      0x174 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0xd68
+.debug_abbrev   0x00000000      0xd80
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x26f LineFollower.o
- .debug_abbrev  0x0000026f       0xe5 twimaster.o
- .debug_abbrev  0x00000354      0x201 USART.o
- .debug_abbrev  0x00000555      0x229 wiinunchuck.o
- .debug_abbrev  0x0000077e       0xc1 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(iob.o)
- .debug_abbrev  0x0000083f      0x149 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(printf.o)
- .debug_abbrev  0x00000988      0x119 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(puts.o)
- .debug_abbrev  0x00000aa1      0x1d6 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
- .debug_abbrev  0x00000c77       0xf1 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
+ .debug_abbrev  0x00000000      0x287 LineFollower.o
+ .debug_abbrev  0x00000287       0xe5 twimaster.o
+ .debug_abbrev  0x0000036c      0x201 USART.o
+ .debug_abbrev  0x0000056d      0x229 wiinunchuck.o
+ .debug_abbrev  0x00000796       0xc1 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(iob.o)
+ .debug_abbrev  0x00000857      0x149 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(printf.o)
+ .debug_abbrev  0x000009a0      0x119 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(puts.o)
+ .debug_abbrev  0x00000ab9      0x1d6 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
+ .debug_abbrev  0x00000c8f       0xf1 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
 
 .debug_line     0x00000000     0x1997
  *(.debug_line)
@@ -843,25 +843,25 @@ LOAD b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  .debug_frame   0x000004f4       0x84 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
  .debug_frame   0x00000578       0x38 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
 
-.debug_str      0x00000000      0x8d5
+.debug_str      0x00000000      0x910
  *(.debug_str)
- .debug_str     0x00000000      0x3b5 LineFollower.o
-                                0x429 (size before relaxing)
- .debug_str     0x000003b5       0x79 twimaster.o
+ .debug_str     0x00000000      0x3bc LineFollower.o
+                                0x430 (size before relaxing)
+ .debug_str     0x000003bc       0xad twimaster.o
                                 0x12d (size before relaxing)
- .debug_str     0x0000042e      0x108 USART.o
+ .debug_str     0x00000469      0x108 USART.o
                                 0x1f4 (size before relaxing)
- .debug_str     0x00000536      0x122 wiinunchuck.o
+ .debug_str     0x00000571      0x122 wiinunchuck.o
                                 0x342 (size before relaxing)
- .debug_str     0x00000658       0x60 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(iob.o)
+ .debug_str     0x00000693       0x60 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(iob.o)
                                 0x10d (size before relaxing)
- .debug_str     0x000006b8       0x8d b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(printf.o)
+ .debug_str     0x000006f3       0x8d b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(printf.o)
                                 0x140 (size before relaxing)
- .debug_str     0x00000745       0x61 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(puts.o)
+ .debug_str     0x00000780       0x61 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(puts.o)
                                 0x10a (size before relaxing)
- .debug_str     0x000007a6       0xcd b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
+ .debug_str     0x000007e1       0xcd b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
                                 0x1ad (size before relaxing)
- .debug_str     0x00000873       0x62 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
+ .debug_str     0x000008ae       0x62 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
                                 0x10d (size before relaxing)
 
 .debug_loc      0x00000000     0x1642
