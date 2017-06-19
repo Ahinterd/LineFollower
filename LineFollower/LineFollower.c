@@ -248,7 +248,7 @@ void nunchuckCheckY(){
 		PORTA &=~ (1 << motorIn2);
 		printf("%d\n", OCR0A);
 		}else if(joyY<=-5){										//Joystick Y in negative position
-		OCR0A = joyY*(-1)*255/joyYMax/2;								//set duty cycle relative to joystick position and only drive at half speed
+		OCR0A = joyY*(-1)*255/joyYMax*3/4;								//set duty cycle relative to joystick position and only drive at 3/4 speed
 		PORTA |= (1<<motorIn2);									//set In2 1 and In1 0 --> Motor turns backwards
 		PORTA &=~ (1 << motorIn1);
 		printf("%d\n", OCR0A);
@@ -353,6 +353,8 @@ int main(void)
 	initStepper();
 	printf("Initialization complete!\n");
 	
+	
+
     while(1)
     {
 		if(automatic == 0)												//Check if Automatic Mode not enabled
@@ -361,7 +363,7 @@ int main(void)
 			//printf("\nZ: %i\nC: %i\nX: %i\nY: %i\n", buttonZ, buttonC, joyX, joyY);
 			//_delay_ms(500);
 			
-			
+
 			nunchuck_getData();			
 			if(buttonC)													//When C pressed toggle Automatic Mode
 			{

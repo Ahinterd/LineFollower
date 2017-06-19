@@ -300,7 +300,7 @@ LOAD b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x1364
+.text           0x00000000     0x137e
  *(.vectors)
  .vectors       0x00000000       0xe4 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6/crtm2560.o
                 0x00000000                __vector_default
@@ -455,124 +455,124 @@ LOAD b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
                 0x000002b0       0x42 LineFollower.o
                 0x000002b0                nunchuck_getData
  .text.nunchuckCheckY
-                0x000002f2       0x88 LineFollower.o
+                0x000002f2       0xa2 LineFollower.o
                 0x000002f2                nunchuckCheckY
  .text.nunchuckCheckX
-                0x0000037a       0x22 LineFollower.o
-                0x0000037a                nunchuckCheckX
+                0x00000394       0x22 LineFollower.o
+                0x00000394                nunchuckCheckX
  .text.ultrasonicCheckDist
-                0x0000039c        0x6 LineFollower.o
-                0x0000039c                ultrasonicCheckDist
+                0x000003b6        0x6 LineFollower.o
+                0x000003b6                ultrasonicCheckDist
  .text.ADC_Read
-                0x000003a2       0x2c LineFollower.o
-                0x000003a2                ADC_Read
+                0x000003bc       0x2c LineFollower.o
+                0x000003bc                ADC_Read
  .text.__vector_15
-                0x000003ce       0x3e LineFollower.o
-                0x000003ce                __vector_15
+                0x000003e8       0x3e LineFollower.o
+                0x000003e8                __vector_15
  .text.__vector_5
-                0x0000040c       0xa0 LineFollower.o
-                0x0000040c                __vector_5
- .text.main     0x000004ac       0xc0 LineFollower.o
-                0x000004ac                main
+                0x00000426       0xa0 LineFollower.o
+                0x00000426                __vector_5
+ .text.main     0x000004c6       0xc0 LineFollower.o
+                0x000004c6                main
  .text.i2c_init
-                0x0000056c        0xc twimaster.o
-                0x0000056c                i2c_init
+                0x00000586        0xc twimaster.o
+                0x00000586                i2c_init
  .text.i2c_start_wait
-                0x00000578       0x50 twimaster.o
-                0x00000578                i2c_start_wait
+                0x00000592       0x50 twimaster.o
+                0x00000592                i2c_start_wait
  .text.i2c_stop
-                0x000005c8       0x12 twimaster.o
-                0x000005c8                i2c_stop
+                0x000005e2       0x12 twimaster.o
+                0x000005e2                i2c_stop
  .text.i2c_write
-                0x000005da       0x24 twimaster.o
-                0x000005da                i2c_write
+                0x000005f4       0x24 twimaster.o
+                0x000005f4                i2c_write
  .text.i2c_readAck
-                0x000005fe       0x16 twimaster.o
-                0x000005fe                i2c_readAck
+                0x00000618       0x16 twimaster.o
+                0x00000618                i2c_readAck
  .text.i2c_readNak
-                0x00000614       0x16 twimaster.o
-                0x00000614                i2c_readNak
+                0x0000062e       0x16 twimaster.o
+                0x0000062e                i2c_readNak
  .text.USARTPutChar
-                0x0000062a       0x7c USART.o
-                0x0000062a                USARTPutChar
+                0x00000644       0x7c USART.o
+                0x00000644                USARTPutChar
  .text.USARTGetChar
-                0x000006a6       0x54 USART.o
-                0x000006a6                USARTGetChar
+                0x000006c0       0x54 USART.o
+                0x000006c0                USARTGetChar
  .text.USARTInitSTDIO
-                0x000006fa       0x10 USART.o
-                0x000006fa                USARTInitSTDIO
+                0x00000714       0x10 USART.o
+                0x00000714                USARTInitSTDIO
  .text.USARTInit
-                0x0000070a      0x314 USART.o
-                0x0000070a                USARTInit
+                0x00000724      0x314 USART.o
+                0x00000724                USARTInit
  .text.wiinunchuck_getjoyX
-                0x00000a1e       0x48 wiinunchuck.o
-                0x00000a1e                wiinunchuck_getjoyX
+                0x00000a38       0x48 wiinunchuck.o
+                0x00000a38                wiinunchuck_getjoyX
  .text.wiinunchuck_getjoyY
-                0x00000a66       0x52 wiinunchuck.o
-                0x00000a66                wiinunchuck_getjoyY
+                0x00000a80       0x52 wiinunchuck.o
+                0x00000a80                wiinunchuck_getjoyY
  .text.wiinunchuck_getbuttonZ
-                0x00000ab8        0x6 wiinunchuck.o
-                0x00000ab8                wiinunchuck_getbuttonZ
+                0x00000ad2        0x6 wiinunchuck.o
+                0x00000ad2                wiinunchuck_getbuttonZ
  .text.wiinunchuck_getbuttonC
-                0x00000abe        0x6 wiinunchuck.o
-                0x00000abe                wiinunchuck_getbuttonC
+                0x00000ad8        0x6 wiinunchuck.o
+                0x00000ad8                wiinunchuck_getbuttonC
  .text.wiinunchuck_getangleX
-                0x00000ac4       0x12 wiinunchuck.o
-                0x00000ac4                wiinunchuck_getangleX
+                0x00000ade       0x12 wiinunchuck.o
+                0x00000ade                wiinunchuck_getangleX
  .text.wiinunchuck_getangleY
-                0x00000ad6       0x12 wiinunchuck.o
-                0x00000ad6                wiinunchuck_getangleY
+                0x00000af0       0x12 wiinunchuck.o
+                0x00000af0                wiinunchuck_getangleY
  .text.wiinunchuck_getangleZ
-                0x00000ae8       0x12 wiinunchuck.o
-                0x00000ae8                wiinunchuck_getangleZ
+                0x00000b02       0x12 wiinunchuck.o
+                0x00000b02                wiinunchuck_getangleZ
  .text.wiinunchuck_avaragefilter
-                0x00000afa       0x50 wiinunchuck.o
-                0x00000afa                wiinunchuck_avaragefilter
+                0x00000b14       0x50 wiinunchuck.o
+                0x00000b14                wiinunchuck_avaragefilter
  .text.wiinunchuck_update
-                0x00000b4a      0x170 wiinunchuck.o
-                0x00000b4a                wiinunchuck_update
+                0x00000b64      0x170 wiinunchuck.o
+                0x00000b64                wiinunchuck_update
  .text.wiinunchuck_init
-                0x00000cba       0x2e wiinunchuck.o
-                0x00000cba                wiinunchuck_init
+                0x00000cd4       0x2e wiinunchuck.o
+                0x00000cd4                wiinunchuck_init
  .text.libgcc.div
-                0x00000ce8       0x26 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_divmodhi4.o)
-                0x00000ce8                _div
-                0x00000ce8                __divmodhi4
+                0x00000d02       0x26 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_divmodhi4.o)
+                0x00000d02                _div
+                0x00000d02                __divmodhi4
  .text.libgcc.div
-                0x00000d0e       0x36 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_divmodsi4.o)
-                0x00000d0e                __divmodsi4
+                0x00000d28       0x36 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_divmodsi4.o)
+                0x00000d28                __divmodsi4
  .text.libgcc.div
-                0x00000d44       0x28 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_udivmodhi4.o)
-                0x00000d44                __udivmodhi4
+                0x00000d5e       0x28 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_udivmodhi4.o)
+                0x00000d5e                __udivmodhi4
  .text.libgcc.div
-                0x00000d6c       0x44 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_udivmodsi4.o)
-                0x00000d6c                __udivmodsi4
+                0x00000d86       0x44 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_udivmodsi4.o)
+                0x00000d86                __udivmodsi4
  .text.avr-libc
-                0x00000db0       0x22 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(printf.o)
-                0x00000db0                printf
+                0x00000dca       0x22 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(printf.o)
+                0x00000dca                printf
  .text.avr-libc
-                0x00000dd2       0x5e b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(puts.o)
-                0x00000dd2                puts
+                0x00000dec       0x5e b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(puts.o)
+                0x00000dec                puts
  .text.avr-libc
-                0x00000e30      0x3f0 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
-                0x00000e30                vfprintf
+                0x00000e4a      0x3f0 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(vfprintf_std.o)
+                0x00000e4a                vfprintf
  .text.avr-libc
-                0x00001220       0x16 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(strnlen_P.o)
-                0x00001220                strnlen_P
+                0x0000123a       0x16 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(strnlen_P.o)
+                0x0000123a                strnlen_P
  .text.avr-libc
-                0x00001236       0x16 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(strnlen.o)
-                0x00001236                strnlen
+                0x00001250       0x16 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(strnlen.o)
+                0x00001250                strnlen
  .text.avr-libc
-                0x0000124c       0x58 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
-                0x0000124c                fputc
+                0x00001266       0x58 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(fputc.o)
+                0x00001266                fputc
  .text.avr-libc
-                0x000012a4       0xbc b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(ultoa_invert.o)
-                0x000012a4                __ultoa_invert
-                0x00001360                . = ALIGN (0x2)
+                0x000012be       0xbc b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(ultoa_invert.o)
+                0x000012be                __ultoa_invert
+                0x0000137a                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00001360        0x0 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_exit.o)
-                0x00001360                _exit
-                0x00001360                exit
+ .fini9         0x0000137a        0x0 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_exit.o)
+                0x0000137a                _exit
+                0x0000137a                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -591,11 +591,11 @@ LOAD b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00001360        0x4 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_exit.o)
+ .fini0         0x0000137a        0x4 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr6\libgcc.a(_exit.o)
  *(.fini0)
-                0x00001364                _etext = .
+                0x0000137e                _etext = .
 
-.data           0x00800200       0x8e load address 0x00001364
+.data           0x00800200       0x8e load address 0x0000137e
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800200        0x0 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6/crtm2560.o
@@ -690,8 +690,8 @@ LOAD b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr
  COMMON         0x0080032d        0x6 b:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr6\libc.a(iob.o)
                 0x0080032d                __iob
                 0x00800333                PROVIDE (__bss_end, .)
-                0x00001364                __data_load_start = LOADADDR (.data)
-                0x000013f2                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000137e                __data_load_start = LOADADDR (.data)
+                0x0000140c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800333        0x0
                 0x00800333                PROVIDE (__noinit_start, .)
